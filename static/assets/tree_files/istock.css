@@ -1,0 +1,43 @@
+#istockphoto-placeholder {
+ clear:both;
+ height:154px;
+ background:#e9ecef
+}
+#istockphoto-placeholder {
+ margin-bottom:.5rem;
+ margin-right:.5rem;
+ border-radius:.4rem;
+ overflow:hidden
+}
+#istockphoto-banner .top-links {
+ position:relative;
+ z-index:10
+}
+#istockphoto-banner:after {
+	background-image: linear-gradient(to right, rgba(255,255,255,0), #e9ecef);
+}
+.rounded{
+border-radius: .3rem !important;
+}
+.shadow-sm {
+    -webkit-box-shadow: 0 0.125rem 0.25rem rgba(73,80,87,0.05) !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(73,80,87,0.05) !important;
+}
+.d-inline-block{
+display:inline-block !important;
+}
+.overflow-faded {
+    overflow: hidden;
+    position: relative;
+}
+.overflow-faded .overflow-wrapper {
+    width: 5000px;
+}
+.overflow-faded::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 2%;
+}

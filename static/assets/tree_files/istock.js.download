@@ -1,0 +1,91 @@
+$(function() {
+    var i = {
+        init: function() {
+	   if(!isMobile){
+            	if(estamos=="search" || estamos=="iconset"){
+			this.placeholder(),
+			this.attach() 
+		}else{
+			this.fetch()
+		}
+		}
+        },
+        placeholder: function() {
+		var retrasar=0;
+		if($( "#bsa-placeholder-search" ).length && estamos=="search")retrasar=$(".icon-preview").height();
+            if (!(0 < $("#istockphoto-placeholder").length) && 0 !== $(".icon-grid").length) {
+                var t = $(".icon-grid .icon-preview"),
+                    e = Math.round($(".icon-grid").width() / $(".icon-preview").width()),
+                    i = $(window).height() - $(".icon-grid").offset().top + retrasar,
+                    o = Math.ceil(i / $(".icon-preview").height()),
+                    n = Math.floor(t.length / e);
+                n < o && (o = n);
+                var r = e * o,
+                    a = $("<div />", {
+                        id: "istockphoto-placeholder"
+                    });
+                r > t.length && (r = t.length), t.eq(r - 1).after(a)
+            }
+        },
+        in_view: function() {
+            if (0 === $("#istockphoto-placeholder").length) return !1;
+            var t = $(window).scrollTop(),
+                e = $(window).height(),
+                i = $("#istockphoto-placeholder").offset().top;
+            return i <= e + t
+        },
+        attach: function() {
+            0 !== $("#istockphoto-placeholder").length && (i.in_view() ? i.fetch() : this.defer())
+        },
+        defer: function() {
+            0 !== $("#istockphoto-placeholder").length && $(window).on("scroll.istock", function() {
+                i.in_view() && (i.fetch(), $(window).off("scroll.istock"))
+            })
+        },
+        search_data: function() {
+	    if(isMobile)num=6;
+	    else num=20;	
+            var t = {
+                sort_order: "most_popular",
+                graphical_styles: "illustration,vector",
+                exclude_nudity: "true",
+                orientations: "square",
+                page_size: num,
+		page:pag,
+                fields: "summary_set,referral_destinations",
+                phrase: filtro || ""
+            };
+            return $.extend(t, $("#istockphoto-placeholder").data()), t
+        },
+        fetch: function() {
+            $.ajax({
+                url: "https://api.gettyimages.com/v3/search/images/creative",
+                data: i.search_data(),
+                headers: {
+                    "Api-Key": "sc33cbrwne69k3r4m62uqxq3",
+		    "Accept-Language": idioma
+                },
+                success: function(t) {
+			$("#istockphoto-placeholder").load("../pintaistock.php", {data:JSON.stringify(t)}), $('#istockphoto-banner [data-toggle="tooltip"]').tooltip()
+                }
+            })
+        },
+    };
+    i.init(), $(document).on("search.results", function() {
+        i.init()
+    })
+});
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
